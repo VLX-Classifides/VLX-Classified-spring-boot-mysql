@@ -1,6 +1,5 @@
 package com.webapp.demo.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,8 +7,8 @@ import javax.persistence.Id;
 
 @Entity
 public class Products {
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private String name;
 	/*
 	 * @Column(name="photo", length = 1000) private byte[] photo;
@@ -25,10 +24,17 @@ public class Products {
 	private String loc;
 	private String createddate;
 	private String createdby;
-	public long getId() {
+	private String img1;
+	public String getImg1() {
+		return img1;
+	}
+	public void setImg1(String img1) {
+		this.img1 = img1;
+	}
+	public int getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getName() {

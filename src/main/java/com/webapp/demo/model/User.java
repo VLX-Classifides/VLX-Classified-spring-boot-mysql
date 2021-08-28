@@ -15,17 +15,39 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	private String username;
 	private String email;
 	private String password;
 	private String contact;
 	private String address;
-	public Long getId() {
+	private boolean primemember;
+	private String role;
+	private String acdetail;
+	public boolean isPrimemember() {
+		return primemember;
+	}
+	public void setPrimemember(boolean primemember) {
+		this.primemember = primemember;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	public String getAcdetail() {
+		return acdetail;
+	}
+	public void setAcdetail(String acdetail) {
+		this.acdetail = acdetail;
+	} 
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getUsername() {
