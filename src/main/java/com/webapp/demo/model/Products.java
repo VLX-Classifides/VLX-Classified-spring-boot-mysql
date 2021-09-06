@@ -10,9 +10,6 @@ public class Products {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
-	/*
-	 * @Column(name="photo", length = 1000) private byte[] photo;
-	 */
 	private String brand;
 	private String descr;
 	private int usedyr;
