@@ -25,7 +25,7 @@ public class User {
 	private String address;
 	private boolean primemember;
 	private String role;
-	private String acdetail;
+	private long acdetail;
 	public boolean isPrimemember() {
 		return primemember;
 	}
@@ -38,10 +38,10 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public String getAcdetail() {
+	public long getAcdetail() {
 		return acdetail;
 	}
-	public void setAcdetail(String acdetail) {
+	public void setAcdetail(long acdetail) {
 		this.acdetail = acdetail;
 	} 
 	public int getId() {

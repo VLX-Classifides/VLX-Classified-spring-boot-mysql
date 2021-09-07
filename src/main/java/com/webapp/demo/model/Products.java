@@ -20,8 +20,15 @@ public class Products {
 	private boolean negotiable;
 	private String loc;
 	private String createddate;
-	private String createdby;
+	private int createdby;
+	private String status;
 	private String img1;
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public String getImg1() {
 		return img1;
 	}
@@ -100,10 +107,10 @@ public class Products {
 	public void setCreateddate(String createddate) {
 		this.createddate = createddate;
 	}
-	public String getCreatedby() {
+	public int getCreatedby() {
 		return createdby;
 	}
-	public void setCreatedby(String createdby) {
+	public void setCreatedby(int createdby) {
 		this.createdby = createdby;
 	}
 	

@@ -38,7 +38,7 @@ public class ProductController {
 		Products product = productsrepo.findById(id).orElse(null);
 		return ResponseEntity.ok(product);
 	}
-	@PostMapping("/api/product")
+	@PostMapping("/addProduct")
 	public ResponseEntity<Products> createProduct(@RequestBody Products product)
 	{
 		productsrepo.save(product);
