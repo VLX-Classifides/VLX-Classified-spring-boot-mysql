@@ -3,8 +3,11 @@ package com.webapp.demo.controller;
 import java.io.IOException;
 import java.util.List;
 
+import com.webapp.demo.model.ResponseModelParameter;
 import com.webapp.demo.model.User;
+import com.webapp.demo.service.imageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -17,40 +20,40 @@ import org.springframework.web.multipart.MultipartFile;
 public class VLXController {
 	@Autowired
 	ProductsRepo productsrepo;
-	
-	@GetMapping("/")
-	public String welcome()
-	{
-		return "Welcome to ecommerce";
-	}
+
+	@Autowired
+	imageService imageS;
+
 
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/products")
-	@ResponseBody
+	@GetMapping("/api/products")
 	public List<Products> getProducts()
 	{
 		return productsrepo.findAll();
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/products/{id}")
-	public ResponseEntity<Products> getProductById(@PathVariable("id") long id)
+	@GetMapping("/api/product/{id}")
+	public ResponseModelParameter<Products> getProductById(@PathVariable("id") long id)
 	{
 		Products product= productsrepo.findById(id).orElse(null);
-		return ResponseEntity.ok(product);
+		return new ResponseModelParameter<Products>(true, "product body", product);
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/api/product")
-	public ResponseEntity<MultipartFile> createProduct(@RequestBody MultipartFile multipartfile) throws IOException {
+	public ResponseModelParameter<Products> createProduct(@RequestBody Products product) throws IOException {
 
-		String fileName = StringUtils.cleanPath(multipartfile.getOriginalFilename());
-		//product.setPhotos(fileName);
+		Products newProduct = productsrepo.save(product);
 
-		//Products newProduct = productsrepo.save(product);
-		String uploadDir = "product-photos/" + "1";
-		FileUploadUtil.saveFile(uploadDir, fileName, multipartfile);
+		return new ResponseModelParameter<Products>(true, "Product Created", newProduct);
+	}
 
-		return ResponseEntity.ok(multipartfile);
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping(value="/api/product/{id}/assign-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseModelParameter<Products> assignImageToProduct(@PathVariable String id, @RequestParam MultipartFile file) throws IOException {
+
+		Products product = imageS.saveImageFile(Long.valueOf(id), file);
+		return new ResponseModelParameter<Products>(true, "Image added", product);
 	}
 }

@@ -19,8 +19,12 @@ public class SignupController {
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/user/create")
     public ResponseModelParameter<User> createUser(@RequestBody User user){
+        User user1 = userRepo.findByEmail(user.getEmail());
+        if(user1.getId() != null){
+            return new ResponseModelParameter<User>(false, "User already present. Login", null);
+        }
         User newUser = userRepo.save(user);
-        return new ResponseModelParameter<User>(true, "user created", newUser);
+        return new ResponseModelParameter<User>(true, "Signup Successfull", newUser);
     }
 
 }

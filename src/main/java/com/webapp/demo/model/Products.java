@@ -1,10 +1,6 @@
 package com.webapp.demo.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Products {
@@ -26,8 +22,8 @@ public class Products {
 	private String createddate;
 	//private User createdby;
 
-	@Column(nullable = true, length = 64)
-	private String photos;
+	@Lob
+	private Byte[] image;
 
 	public long getId() {
 		return id;
@@ -125,11 +121,11 @@ public class Products {
 		this.createddate = createddate;
 	}
 
-	public String getPhotos() {
-		return photos;
+	public Byte[] getImage() {
+		return image;
 	}
 
-	public void setPhotos(String photos) {
-		this.photos = photos;
+	public void setImage(Byte[] image) {
+		this.image = image;
 	}
 }
