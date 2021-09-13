@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webapp.demo.model.Products;
+import com.webapp.demo.model.ResponseModelList;
+import com.webapp.demo.model.ResponseModelParameter;
 import com.webapp.demo.repo.ProductsRepo;
 
 @CrossOrigin(origins = "http://localhost:3000/")
@@ -29,8 +31,9 @@ public class ProductController {
 
 	@GetMapping("/products")
 	@ResponseBody
-	public List<Products> getProducts() {
-		return productsrepo.findAll();
+	public ResponseModelList<Products> getProducts() {
+		List<Products> products= productsrepo.findAll();
+		return new ResponseModelList<Products>(true,"all products",products);
 	}
 
 	@GetMapping("/products/{id}")
@@ -39,10 +42,10 @@ public class ProductController {
 		return ResponseEntity.ok(product);
 	}
 	@PostMapping("/addProduct")
-	public ResponseEntity<Products> createProduct(@RequestBody Products product)
+	public ResponseModelParameter<Products> createProduct(@RequestBody Products product)
 	{
-		productsrepo.save(product);
-		return ResponseEntity.ok(product);
+		Products newProduct=productsrepo.save(product);
+		return new ResponseModelParameter<Products>(true,"product created",newProduct);
 		
 	}
 	

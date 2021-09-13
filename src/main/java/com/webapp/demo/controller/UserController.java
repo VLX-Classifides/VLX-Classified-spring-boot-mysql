@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.webapp.demo.model.Login;
+import com.webapp.demo.model.ResponseModelList;
+import com.webapp.demo.model.ResponseModelParameter;
 import com.webapp.demo.model.User;
 import com.webapp.demo.repo.UserRepo;
 
@@ -21,23 +24,31 @@ public class UserController {
 	
 
 	// controller for users login and signup
-	@PostMapping("/signup")
-	public User signup(@RequestBody User user) {
+	@PostMapping("/user/signup")
+	public ResponseModelParameter<User> signup(@RequestBody User user) {
 		
-		return userrepo.save(user);
+		User newUser =userrepo.save(user);
+		return new ResponseModelParameter<User>(true, "user created", newUser);
 	}
 
 	@GetMapping("/users")
-	public List<User> getAllUser() {
-		return userrepo.findAll();
+	public ResponseModelList<User> getAllUser() {
+		List<User> users=userrepo.findAll();
+		return new ResponseModelList<User>(true,"user list", users);
 	}
 
-	@PostMapping("/login")
-	public User login(@RequestBody User userLogin) {
-		User user = userrepo.findByEmail(userLogin.getEmail());
+	@PostMapping("/user/login")
+	public ResponseModelParameter<User> login(@RequestBody Login login) {
+		User user = userrepo.findByEmail(login.getEmail());
+		if(user==null)
+			return new ResponseModelParameter<>(false, "user not found", null);
 		String pass=user.getPassword();
-		if(pass.equals(userLogin.getPassword()))
-			return user;
-		return null;
+		if(pass.equals(login.getPassword()))
+		{
+			return new ResponseModelParameter<User>(true, "user found", user);
+		}
+		else {
+			return new ResponseModelParameter<>(false, "Password Incorrect", null);
+		}
 	}
 }

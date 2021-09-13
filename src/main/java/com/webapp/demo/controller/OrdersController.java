@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +13,8 @@ import com.webapp.demo.model.OrderRequest;
 import com.webapp.demo.model.Orders;
 import com.webapp.demo.model.Payments;
 import com.webapp.demo.model.Products;
+import com.webapp.demo.model.RatingAndFeedback;
+import com.webapp.demo.model.ResponseModelParameter;
 import com.webapp.demo.model.User;
 import com.webapp.demo.repo.OrdersRepo;
 import com.webapp.demo.repo.PaymentsRepo;
@@ -35,7 +36,7 @@ public class OrdersController {
 	@Autowired
 	UserRepo userrepo;
 	@PostMapping("/placeOrder")
-	public ResponseEntity<Orders> placeOrder(@RequestBody OrderRequest orderreq)
+	public ResponseModelParameter<Orders> placeOrder(@RequestBody OrderRequest orderreq)
 	{
 		// inserting data in orders table
 		Orders order=new Orders();
@@ -66,6 +67,18 @@ public class OrdersController {
 			payment.setSellercardno(seller.getAcdetail());
 			paymentrepo.save(payment);
 		}
-		return ResponseEntity.ok(order);
+		return new ResponseModelParameter<Orders>(true,"order placed",order);
 	} 
+	
+	// rate order according to order id
+	
+	@PostMapping("/rateOrder")
+	public ResponseModelParameter<Orders> rateOrder(@RequestBody RatingAndFeedback ratingandfeedback)
+	{
+		Orders order=orderrepo.findById(ratingandfeedback.getOrderId()).orElse(null);
+		order.setRating(ratingandfeedback.getRating());
+		order.setFeedback(ratingandfeedback.getFeedback());
+		orderrepo.save(order);
+		return new ResponseModelParameter<Orders>(true, "order rated", order);
+	}
 }
