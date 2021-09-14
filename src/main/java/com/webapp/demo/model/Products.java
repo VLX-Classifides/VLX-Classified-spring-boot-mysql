@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 public class Products {
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private int id;
 	private String name;
 	/*
 	 * @Column(name="photo", length = 1000) private byte[] photo;
@@ -20,16 +20,24 @@ public class Products {
 	private boolean negotiable;
 	private String loc;
 	private String createddate;
-	//private User createdby;
+	private int createdby;
+
+	public int getCreatedby() {
+		return createdby;
+	}
+
+	public void setCreatedby(int createdby) {
+		this.createdby = createdby;
+	}
 
 	@Lob
 	private Byte[] image;
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

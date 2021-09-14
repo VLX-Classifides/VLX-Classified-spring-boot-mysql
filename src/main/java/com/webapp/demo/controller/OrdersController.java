@@ -21,7 +21,7 @@ import com.webapp.demo.repo.ProductsRepo;
 import com.webapp.demo.repo.UserRepo;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 public class OrdersController {
 	@Autowired
 	OrdersRepo orderrepo;

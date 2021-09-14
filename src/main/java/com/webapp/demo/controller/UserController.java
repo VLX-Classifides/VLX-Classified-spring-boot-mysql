@@ -37,7 +37,7 @@ public class UserController {
 		return new ResponseModelList<User>(true,"user list", users);
 	}
 
-	@PostMapping("/user/login")
+	@PostMapping("/user/login1")
 	public ResponseModelParameter<User> login(@RequestBody Login login) {
 		User user = userrepo.findByEmail(login.getEmail());
 		if(user==null)

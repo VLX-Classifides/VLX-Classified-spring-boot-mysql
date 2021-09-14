@@ -18,8 +18,8 @@ public class LoginController {
     @Autowired
     LoginService loginService;
 
-    @CrossOrigin(origins = "http://localhost:3000")
-    @GetMapping("/user/login")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
+    @PostMapping("/user/entry")
     public ResponseModelParameter<User> checkUser(@RequestBody LoginModel loginModel){
         return loginService.checkUser(loginModel);
     }

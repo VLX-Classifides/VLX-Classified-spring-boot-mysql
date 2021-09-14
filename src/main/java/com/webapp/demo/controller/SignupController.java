@@ -16,11 +16,11 @@ public class SignupController {
     @Autowired
     UserRepo userRepo;
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
     @PostMapping("/user/create")
     public ResponseModelParameter<User> createUser(@RequestBody User user){
         User user1 = userRepo.findByEmail(user.getEmail());
-        if(user1.getId() != null){
+        if(user1.getId() != 0){
             return new ResponseModelParameter<User>(false, "User already present. Login", null);
         }
         User newUser = userRepo.save(user);

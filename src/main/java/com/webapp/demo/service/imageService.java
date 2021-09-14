@@ -20,7 +20,7 @@ public class imageService {
     public Products saveImageFile(Long id, MultipartFile file) {
 
         try {
-            Products product = productsRepo.findById(id).get();
+            Products product = productsRepo.findById(Math.toIntExact(id)).get();
 
             Byte[] byteObjects = new Byte[file.getBytes().length];
 
@@ -37,7 +37,7 @@ public class imageService {
         } catch (IOException e) {
             //todo handle better
             //log.error("Error occurred", e);
-            Products product = productsRepo.findById(id).get();
+            Products product = productsRepo.findById(Math.toIntExact(id)).get();
 
             e.printStackTrace();
 

@@ -25,22 +25,22 @@ public class VLXController {
 	imageService imageS;
 
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@GetMapping("/api/products")
 	public List<Products> getProducts()
 	{
 		return productsrepo.findAll();
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@GetMapping("/api/product/{id}")
-	public ResponseModelParameter<Products> getProductById(@PathVariable("id") long id)
+	public ResponseModelParameter<Products> getProductById(@PathVariable("id") int id)
 	{
 		Products product= productsrepo.findById(id).orElse(null);
 		return new ResponseModelParameter<Products>(true, "product body", product);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping("/api/product")
 	public ResponseModelParameter<Products> createProduct(@RequestBody Products product) throws IOException {
 
@@ -49,7 +49,7 @@ public class VLXController {
 		return new ResponseModelParameter<Products>(true, "Product Created", newProduct);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping(value="/api/product/{id}/assign-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseModelParameter<Products> assignImageToProduct(@PathVariable String id, @RequestParam MultipartFile file) throws IOException {
 
