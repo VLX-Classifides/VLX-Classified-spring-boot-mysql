@@ -13,6 +13,7 @@ import com.webapp.demo.model.OrderRequest;
 import com.webapp.demo.model.Orders;
 import com.webapp.demo.model.Payments;
 import com.webapp.demo.model.Products;
+import com.webapp.demo.model.RatingAndFeedback;
 import com.webapp.demo.model.ResponseModelParameter;
 import com.webapp.demo.model.User;
 import com.webapp.demo.repo.OrdersRepo;
@@ -21,7 +22,7 @@ import com.webapp.demo.repo.ProductsRepo;
 import com.webapp.demo.repo.UserRepo;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
+@CrossOrigin(origins = "http://localhost:3000/")
 public class OrdersController {
 	@Autowired
 	OrdersRepo orderrepo;
@@ -68,4 +69,16 @@ public class OrdersController {
 		}
 		return new ResponseModelParameter<Orders>(true,"order placed",order);
 	} 
+	
+	// rate order according to order id
+	
+	@PostMapping("/rateOrder")
+	public ResponseModelParameter<Orders> rateOrder(@RequestBody RatingAndFeedback ratingandfeedback)
+	{
+		Orders order=orderrepo.findById(ratingandfeedback.getOrderId()).orElse(null);
+		order.setRating(ratingandfeedback.getRating());
+		order.setFeedback(ratingandfeedback.getFeedback());
+		orderrepo.save(order);
+		return new ResponseModelParameter<Orders>(true, "order rated", order);
+	}
 }

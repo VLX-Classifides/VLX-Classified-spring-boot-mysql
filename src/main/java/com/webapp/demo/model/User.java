@@ -26,13 +26,6 @@ public class User {
 	private boolean primemember;
 	private String role;
 	private long acdetail;
-
-	public User(String email, String password, String role) {
-		this.email = email;
-		this.password = password;
-		this.role = role;
-	}
-
 	public boolean isPrimemember() {
 		return primemember;
 	}
