@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 public class Products {
@@ -11,29 +12,30 @@ public class Products {
 	private int id;
 	private String name;
 	private String brand;
-	private String descr;
+	private String description;
 	private int usedyr;
 	private String category;
-	private String type;
+	private boolean old;
 	private String condi;
 	private long price;
 	private boolean negotiable;
 	private String loc;
 	private String createddate;
 	private int createdby;
-	private String status;
-	private String img1;
+	private String status="pending";
+	@Lob
+	private Byte[] image;
 	public String getStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getImg1() {
-		return img1;
+	public Byte[] getImage() {
+		return image;
 	}
-	public void setImg1(String img1) {
-		this.img1 = img1;
+	public void setImage(Byte[] image) {
+		this.image = image;
 	}
 	public int getId() {
 		return id;
@@ -53,12 +55,6 @@ public class Products {
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-	public String getDescr() {
-		return descr;
-	}
-	public void setDescr(String descr) {
-		this.descr = descr;
-	}
 	public int getUsedyr() {
 		return usedyr;
 	}
@@ -71,11 +67,17 @@ public class Products {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public String getType() {
-		return type;
+	public String getDescription() {
+		return description;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public boolean isOld() {
+		return old;
+	}
+	public void setOld(boolean old) {
+		this.old = old;
 	}
 	public String getCondi() {
 		return condi;
