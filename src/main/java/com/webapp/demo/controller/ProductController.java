@@ -4,6 +4,7 @@ import org.springframework.http.MediaType;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,13 +59,33 @@ public class ProductController {
 	@GetMapping("/api/products/{category}")
 	public ResponseModelList<Products> getProductByCategory(@PathVariable("category") String category){
 		List<Products> products = productsrepo.findByCategory(category);
-		return new ResponseModelList<Products>(true, "Products by category", products);
+		List<Products> approved=new ArrayList<>();
+		for(Products product:products)
+		{
+			if(product.getStatus().equals("approved"))
+				approved.add(product);
+		}
+		return new ResponseModelList<Products>(true, "Products by category", approved);
 	}
 	
 	@GetMapping("/api/products-by-user/{userid}")
 	public ResponseModelList<Products> getProductsByUser(@PathVariable("userid") int userid){
 		List<Products> products = productsrepo.findByCreatedby(userid);
 		return new ResponseModelList<Products>(true, "Products by User", products);
+	}
+	
+	// get pending product for particular seller
+	@GetMapping("/api/pendingProducts/{sellerId}")
+	@ResponseBody
+	public ResponseModelList<Products> getPendingProductsBySellerId(@PathVariable("sellerId") int sellerId) {
+		List<Products> products= productsrepo.pendingProducts();
+		List<Products> pending=new ArrayList<>();
+		for(Products product :products)
+		{
+			if(product.getCreatedby()==sellerId)
+				pending.add(product);
+		}
+		return new ResponseModelList<Products>(true,"pending products",pending);
 	}
 	
 	// product creation

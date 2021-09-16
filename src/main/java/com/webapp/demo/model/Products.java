@@ -12,17 +12,17 @@ public class Products {
 	private int id;
 	private String name;
 	private String brand;
-	private String descr;
+	private String description;
 	private int usedyr;
 	private String category;
-	private String type;
+	private boolean old;
 	private String condi;
 	private long price;
 	private boolean negotiable;
 	private String loc;
 	private String createddate;
 	private int createdby;
-	private String status;
+	private String status="pending";
 	@Lob
 	private Byte[] image;
 	public String getStatus() {
@@ -55,12 +55,6 @@ public class Products {
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
-	public String getDescr() {
-		return descr;
-	}
-	public void setDescr(String descr) {
-		this.descr = descr;
-	}
 	public int getUsedyr() {
 		return usedyr;
 	}
@@ -73,11 +67,17 @@ public class Products {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public String getType() {
-		return type;
+	public String getDescription() {
+		return description;
 	}
-	public void setType(String type) {
-		this.type = type;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public boolean isOld() {
+		return old;
+	}
+	public void setOld(boolean old) {
+		this.old = old;
 	}
 	public String getCondi() {
 		return condi;

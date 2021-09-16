@@ -25,10 +25,10 @@ public class UserController {
 	
 
 	// controller for users login and signup
-	@PostMapping("/user/signup")
+	@PostMapping("/user/create")
 	public ResponseModelParameter<User> signup(@RequestBody User user) {
 		User user1 = userrepo.findByEmail(user.getEmail());
-        if(user1.getId() != 0){
+        if(user1!= null){
             return new ResponseModelParameter<User>(false, "User already present. Login", null);
         }
         User newUser = userrepo.save(user);

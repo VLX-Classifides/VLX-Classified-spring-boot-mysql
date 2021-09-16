@@ -19,6 +19,7 @@ public interface ProductsRepo extends JpaRepository<Products, Integer>{
 	@Query(value = "select * from products p where p.status=\"approved\"", nativeQuery = true)
 	List<Products> approvedProducts();
 	
+	//@Query(value = "select * from products p where p.status=\"approved\" and p.category='$category'", nativeQuery = true)
 	List<Products> findByCategory(String category);
     List<Products> findByCreatedby(int id);
 }
