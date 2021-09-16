@@ -1,14 +1,10 @@
 package com.webapp.demo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
+import javax.persistence.*;
 
 @Entity
 public class Products {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	private String name;
 	private String brand;
@@ -22,9 +18,11 @@ public class Products {
 	private String loc;
 	private String createddate;
 	private int createdby;
-	private String status="pending";
+	private String status;
+
 	@Lob
 	private Byte[] image;
+
 	public String getStatus() {
 		return status;
 	}

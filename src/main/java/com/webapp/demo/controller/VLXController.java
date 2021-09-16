@@ -3,6 +3,7 @@ package com.webapp.demo.controller;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,7 @@ public class VLXController {
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@GetMapping("/api/product/{id}")
 	public ResponseModelParameter<Products> getProductById(@PathVariable("id") int id) {
+
 		Products product= productsrepo.findById(id).orElse(null);
 		return new ResponseModelParameter<Products>(true, "product body", product);
 	}
@@ -57,8 +59,15 @@ public class VLXController {
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@GetMapping("/api/products-by-user/{userid}")
 	public ResponseModelList<Products> getProductsByUser(@PathVariable("userid") int userid){
-		List<Products> products = productsrepo.findByCreatedby(userid);
-		return new ResponseModelList<Products>(true, "Products by User", products);
+		List<Products> products= productsrepo.approvedProducts();
+		List<Products> selectedProducts=new ArrayList<>();
+		for(Products product :products){
+			if(product.getCreatedby()==userid)
+				selectedProducts.add(product);
+		}
+		return new ResponseModelList<Products>(true,"pending products",selectedProducts);
+//		List<Products> products = productsrepo.findByCreatedby(userid);
+//		return new ResponseModelList<Products>(true, "Products by User", products);
 	}
 
 
@@ -71,6 +80,7 @@ public class VLXController {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
 		product.setCreateddate(dateFormat.format(date));
+		product.setStatus("pending");
 		Products newProduct = productsrepo.save(product);
 
 		return new ResponseModelParameter<Products>(true, "Product Created", newProduct);
@@ -78,9 +88,9 @@ public class VLXController {
 
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping(value="/api/product/{id}/assign-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseModelParameter<Products> assignImageToProduct(@PathVariable String id, @RequestParam MultipartFile file) throws IOException {
+	public ResponseModelParameter<Products> assignImageToProduct(@PathVariable int id, @RequestParam MultipartFile file) throws IOException {
 
-		Products product = imageS.saveImageFile(Long.valueOf(id), file);
+		Products product = imageS.saveImageFile(id, file);
 		return new ResponseModelParameter<Products>(true, "Image added", product);
 	}
 }

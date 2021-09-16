@@ -16,24 +16,13 @@ import com.webapp.demo.model.ResponseModelParameter;
 import com.webapp.demo.model.User;
 import com.webapp.demo.repo.UserRepo;
 
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 @RestController
 public class UserController {
 	
 	@Autowired
 	UserRepo userrepo;
-	
 
-	// controller for users login and signup
-	@PostMapping("/user/create")
-	public ResponseModelParameter<User> signup(@RequestBody User user) {
-		User user1 = userrepo.findByEmail(user.getEmail());
-        if(user1!= null){
-            return new ResponseModelParameter<User>(false, "User already present. Login", null);
-        }
-        User newUser = userrepo.save(user);
-        return new ResponseModelParameter<User>(true, "Signup Successfull", newUser);
-	}
 
 	@GetMapping("/users")
 	public ResponseModelList<User> getAllUser() {
@@ -42,25 +31,10 @@ public class UserController {
 	}
 	
 	// get user details by id
-	
 	@GetMapping("/user/{id}")
 	public ResponseModelParameter<User> getIndividualUser(@PathVariable("id") int id)
 	{
 		User user=userrepo.findById(id).orElse(null);
 		return new ResponseModelParameter<User>(true, "individual user data", user);
-	}
-	@PostMapping("/user/entry")
-	public ResponseModelParameter<User> login(@RequestBody Login login) {
-		User user = userrepo.findByEmail(login.getEmail());
-		if(user==null)
-			return new ResponseModelParameter<>(false, "user not found", null);
-		String pass=user.getPassword();
-		if(pass.equals(login.getPassword()))
-		{
-			return new ResponseModelParameter<User>(true, "user found", user);
-		}
-		else {
-			return new ResponseModelParameter<>(false, "Password Incorrect", null);
-		}
 	}
 }

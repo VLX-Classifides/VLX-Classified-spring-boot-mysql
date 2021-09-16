@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.webapp.demo.model.Products;
 
 @Repository
-public interface ProductsRepo extends JpaRepository<Products, Integer>{
+public interface ProductsRepo extends JpaRepository<Products, Integer>, ProductRepoCustom{
 	
 	// products which are not approved
 	@Query(value = "select * from products p where p.status=\"pending\"", nativeQuery = true)
@@ -20,6 +20,6 @@ public interface ProductsRepo extends JpaRepository<Products, Integer>{
 	List<Products> approvedProducts();
 	
 	//@Query(value = "select * from products p where p.status=\"approved\" and p.category='$category'", nativeQuery = true)
-	List<Products> findByCategory(String category);
-    List<Products> findByCreatedby(int id);
+	//List<Products> findByCategory(String category);
+    //List<Products> findByCreatedby(int id);
 }

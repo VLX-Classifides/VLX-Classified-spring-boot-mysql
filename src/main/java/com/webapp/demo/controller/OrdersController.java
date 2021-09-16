@@ -3,19 +3,10 @@ package com.webapp.demo.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.webapp.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.webapp.demo.model.OrderRequest;
-import com.webapp.demo.model.Orders;
-import com.webapp.demo.model.Payments;
-import com.webapp.demo.model.Products;
-import com.webapp.demo.model.RatingAndFeedback;
-import com.webapp.demo.model.ResponseModelParameter;
-import com.webapp.demo.model.User;
 import com.webapp.demo.repo.OrdersRepo;
 import com.webapp.demo.repo.PaymentsRepo;
 import com.webapp.demo.repo.ProductsRepo;
@@ -32,25 +23,36 @@ public class OrdersController {
 	
 	@Autowired
 	PaymentsRepo paymentrepo;
-	// place order and save in Orders
+
 	@Autowired
 	UserRepo userrepo;
+
+
+	//get user specific orders
+	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
+	@GetMapping("/api/orders/{userid}")
+	public ResponseModelList<Orders> getOrdersByBuyer(@PathVariable("userid") int id){
+		List<Orders> ordersList = orderrepo.findByBuyerid(id);
+		return new ResponseModelList<Orders>(true, "Buyer orders", ordersList);
+	}
+
+
+	// place order and save in Orders
+	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping("/placeOrder")
-	public ResponseModelParameter<Orders> placeOrder(@RequestBody OrderRequest orderreq)
-	{
+	public ResponseModelParameter<Orders> placeOrder(@RequestBody OrderRequest orderreq){
 		// inserting data in orders table
-		Orders order=new Orders();
+		Orders order = new Orders();
 		order.setBuyerid(orderreq.getBuyerid());
-		List<Integer> prdtlist=orderreq.getPrdtids();
-		String prdts=prdtlist.stream().map(String::valueOf).collect(Collectors.joining(","));
+		List<Integer> prdtlist = orderreq.getPrdtids();
+		String prdts = prdtlist.stream().map(String::valueOf).collect(Collectors.joining(","));
 		order.setPrdtids(prdts);
 		order.setPrice(orderreq.getPrice());
 		orderrepo.save(order);
 		
 		//inserting data in payments table
 		
-		for(int i=0;i<prdtlist.size();i++)
-		{
+		for(int i=0;i<prdtlist.size();i++){
 			// getting product details by product id
 			Products product=new Products();
 			product=productrepo.getById(prdtlist.get(i));
@@ -71,10 +73,9 @@ public class OrdersController {
 	} 
 	
 	// rate order according to order id
-	
+	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping("/rateOrder")
-	public ResponseModelParameter<Orders> rateOrder(@RequestBody RatingAndFeedback ratingandfeedback)
-	{
+	public ResponseModelParameter<Orders> rateOrder(@RequestBody RatingAndFeedback ratingandfeedback){
 		Orders order=orderrepo.findById(ratingandfeedback.getOrderId()).orElse(null);
 		order.setRating(ratingandfeedback.getRating());
 		order.setFeedback(ratingandfeedback.getFeedback());

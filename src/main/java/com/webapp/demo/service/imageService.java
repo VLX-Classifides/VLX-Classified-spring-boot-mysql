@@ -10,17 +10,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Service
-public class ImageService {
+public class imageService {
 
     @Autowired
     ProductsRepo productsRepo;
 
     //@Override
     @Transactional
-    public Products saveImageFile(Long id, MultipartFile file) {
+    public Products saveImageFile(int id, MultipartFile file) {
 
         try {
-            Products product = productsRepo.findById(Math.toIntExact(id)).get();
+            Products product = productsRepo.findById(id).get();
 
             Byte[] byteObjects = new Byte[file.getBytes().length];
 
@@ -37,7 +37,7 @@ public class ImageService {
         } catch (IOException e) {
             //todo handle better
             //log.error("Error occurred", e);
-            Products product = productsRepo.findById(Math.toIntExact(id)).get();
+            Products product = productsRepo.findById(id).get();
 
             e.printStackTrace();
 
