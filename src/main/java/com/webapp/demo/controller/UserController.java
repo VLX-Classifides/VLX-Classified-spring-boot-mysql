@@ -3,12 +3,7 @@ package com.webapp.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.webapp.demo.model.Login;
 import com.webapp.demo.model.ResponseModelList;
@@ -32,9 +27,16 @@ public class UserController {
 	
 	// get user details by id
 	@GetMapping("/user/{id}")
-	public ResponseModelParameter<User> getIndividualUser(@PathVariable("id") int id)
-	{
+	public ResponseModelParameter<User> getIndividualUser(@PathVariable("id") int id){
 		User user=userrepo.findById(id).orElse(null);
 		return new ResponseModelParameter<User>(true, "individual user data", user);
+	}
+
+	@PutMapping("/user/primemember/{id}")
+	public ResponseModelParameter<User> makePrimeMember(@PathVariable("id") int id){
+		User user=userrepo.findById(id).orElse(null);
+		user.setPrimemember(true);
+		userrepo.save(user);
+		return new ResponseModelParameter<User>(true, "Thanks for becoming a member", user);
 	}
 }

@@ -68,6 +68,19 @@ public class ProductController {
 		List<Products> products= productsrepo.pendingProducts();
 		return new ResponseModelList<Products>(true,"pending products",products);
 	}
+
+	@GetMapping("/api/rejectedProducts/{sellerId}")
+	@ResponseBody
+	public ResponseModelList<Products> getRejectedProductsBySellerId(@PathVariable("sellerId") int sellerId) {
+		List<Products> products= productsrepo.rejectedProducts();
+		List<Products> rejected=new ArrayList<>();
+		for(Products product :products)
+		{
+			if(product.getCreatedby()==sellerId)
+				rejected.add(product);
+		}
+		return new ResponseModelList<Products>(true,"rejected products",rejected);
+	}
 	
 	// approve one product
 	@PutMapping("/approveProduct/{id}")
@@ -78,13 +91,23 @@ public class ProductController {
 		productsrepo.save(product);
 		return new ResponseModelParameter<Products>(true, "product approved", product);
 	}
-	
-	// delete product by id
-	@DeleteMapping("/rejectProduct/{id}")
-	public ResponseModelParameter<Products> deleteProduct(@PathVariable("id") int id)
+
+	//reject a product
+	@PutMapping("/rejectProduct/{id}")
+	public ResponseModelParameter<Products> rejectProduct(@PathVariable("id") int id)
 	{
 		Products product=productsrepo.findById(id).orElse(null);
-		productsrepo.delete(product);
-		return new ResponseModelParameter<Products>(true, "product deleted", product);
+		product.setStatus("rejected");
+		productsrepo.save(product);
+		return new ResponseModelParameter<Products>(true, "product approved", product);
 	}
+	
+	// delete product by id
+//	@DeleteMapping("/rejectProduct/{id}")
+//	public ResponseModelParameter<Products> deleteProduct(@PathVariable("id") int id)
+//	{
+//		Products product=productsrepo.findById(id).orElse(null);
+//		productsrepo.delete(product);
+//		return new ResponseModelParameter<Products>(true, "product deleted", product);
+//	}
 }
