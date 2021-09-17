@@ -70,6 +70,7 @@ public class OrdersController {
 			seller=userrepo.getById(product.getCreatedby());
 			
 			Payments payment=new Payments();
+			payment.setPrdtid(prdtlist.get(i));
 			payment.setBuyerid(orderreq.getBuyerid());
 			payment.setBuyercardno(orderreq.getBuyercardno());
 			payment.setPrice(product.getPrice());
@@ -83,7 +84,7 @@ public class OrdersController {
 	// rate order according to order id
 	@PostMapping("/rateOrder")
 	public ResponseModelParameter<Orders> rateOrder(@RequestBody RatingAndFeedback ratingandfeedback){
-		Orders order=orderrepo.findById(ratingandfeedback.getOrderId()).orElse(null);
+		Orders order=orderrepo.findById(ratingandfeedback.getOrderid()).orElse(null);
 		order.setRating(ratingandfeedback.getRating());
 		order.setFeedback(ratingandfeedback.getFeedback());
 		orderrepo.save(order);
