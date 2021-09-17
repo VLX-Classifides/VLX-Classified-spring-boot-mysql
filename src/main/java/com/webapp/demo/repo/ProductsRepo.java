@@ -18,6 +18,10 @@ public interface ProductsRepo extends JpaRepository<Products, Integer>, ProductR
 	// products approved
 	@Query(value = "select * from products p where p.status=\"approved\"", nativeQuery = true)
 	List<Products> approvedProducts();
+
+	//products rejected
+	@Query(value = "select * from products p where p.status=\"rejected\"", nativeQuery = true)
+	List<Products> rejectedProducts();
 	
 	//@Query(value = "select * from products p where p.status=\"approved\" and p.category='$category'", nativeQuery = true)
 	//List<Products> findByCategory(String category);

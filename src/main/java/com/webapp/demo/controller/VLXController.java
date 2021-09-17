@@ -52,8 +52,13 @@ public class VLXController {
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@GetMapping("/api/products/{category}")
 	public ResponseModelList<Products> getProductByCategory(@PathVariable("category") String category){
-		List<Products> products = productsrepo.findByCategory(category);
-		return new ResponseModelList<Products>(true, "Products by category", products);
+		List<Products> products= productsrepo.approvedProducts();
+		List<Products> selectedProducts = new ArrayList<>();
+		for(Products product :products){
+			if(product.getCategory().equals(category))
+				selectedProducts.add(product);
+		}
+		return new ResponseModelList<Products>(true,"approved products by category",selectedProducts);
 	}
 
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
@@ -65,9 +70,7 @@ public class VLXController {
 			if(product.getCreatedby()==userid)
 				selectedProducts.add(product);
 		}
-		return new ResponseModelList<Products>(true,"pending products",selectedProducts);
-//		List<Products> products = productsrepo.findByCreatedby(userid);
-//		return new ResponseModelList<Products>(true, "Products by User", products);
+		return new ResponseModelList<Products>(true,"approved products for seller",selectedProducts);
 	}
 
 
