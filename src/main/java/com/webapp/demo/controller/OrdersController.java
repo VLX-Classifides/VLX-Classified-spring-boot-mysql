@@ -1,5 +1,8 @@
 package com.webapp.demo.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,7 +16,7 @@ import com.webapp.demo.repo.ProductsRepo;
 import com.webapp.demo.repo.UserRepo;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 public class OrdersController {
 	@Autowired
 	OrdersRepo orderrepo;
@@ -29,7 +32,6 @@ public class OrdersController {
 
 
 	//get user specific orders
-	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@GetMapping("/api/orders/{userid}")
 	public ResponseModelList<Orders> getOrdersByBuyer(@PathVariable("userid") int id){
 		List<Orders> ordersList = orderrepo.findByBuyerid(id);
@@ -38,7 +40,6 @@ public class OrdersController {
 
 
 	// place order and save in Orders
-	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping("/placeOrder")
 	public ResponseModelParameter<Orders> placeOrder(@RequestBody OrderRequest orderreq){
 		// inserting data in orders table
@@ -48,6 +49,11 @@ public class OrdersController {
 		String prdts = prdtlist.stream().map(String::valueOf).collect(Collectors.joining(","));
 		order.setPrdtids(prdts);
 		order.setPrice(orderreq.getPrice());
+
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		order.setCreateddate(dateFormat.format(date));
+
 		orderrepo.save(order);
 		
 		//inserting data in payments table
@@ -73,7 +79,6 @@ public class OrdersController {
 	} 
 	
 	// rate order according to order id
-	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping("/rateOrder")
 	public ResponseModelParameter<Orders> rateOrder(@RequestBody RatingAndFeedback ratingandfeedback){
 		Orders order=orderrepo.findById(ratingandfeedback.getOrderId()).orElse(null);

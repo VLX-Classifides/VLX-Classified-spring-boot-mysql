@@ -13,8 +13,19 @@ public class Orders {
 	private int buyerid;
 	private String prdtids;
 	private long price;
+
+	private String createddate;
+	public String getCreateddate() {
+		return createddate;
+	}
+
+	public void setCreateddate(String createddate) {
+		this.createddate = createddate;
+	}
+
 	private int rating;
 	private String feedback;
+
 	public int getId() {
 		return id;
 	}
