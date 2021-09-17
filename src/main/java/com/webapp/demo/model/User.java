@@ -25,14 +25,8 @@ public class User {
 	private String address;
 	private boolean primemember;
 	private String role;
-	private long acdetail;
-
-	public User(String email, String password, String role) {
-		this.email = email;
-		this.password = password;
-		this.role = role;
-	}
-
+	@Column(name = "creditcard")
+	private long creditCard;
 	public boolean isPrimemember() {
 		return primemember;
 	}
@@ -45,12 +39,13 @@ public class User {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public long getAcdetail() {
-		return acdetail;
+	 
+	public long getCreditCard() {
+		return creditCard;
 	}
-	public void setAcdetail(long acdetail) {
-		this.acdetail = acdetail;
-	} 
+	public void setCreditCard(long creditCard) {
+		this.creditCard = creditCard;
+	}
 	public int getId() {
 		return id;
 	}

@@ -41,12 +41,13 @@ public class OrdersController {
 
 	// place order and save in Orders
 	@PostMapping("/placeOrder")
-	public ResponseModelParameter<Orders> placeOrder(@RequestBody OrderRequest orderreq){
+	public ResponseModelParameter<Orders> placeOrder(@RequestBody OrderRequest orderreq)
+	{
 		// inserting data in orders table
-		Orders order = new Orders();
+		Orders order=new Orders();
 		order.setBuyerid(orderreq.getBuyerid());
-		List<Integer> prdtlist = orderreq.getPrdtids();
-		String prdts = prdtlist.stream().map(String::valueOf).collect(Collectors.joining(","));
+		List<Integer> prdtlist=orderreq.getPrdtids();
+		String prdts=prdtlist.stream().map(String::valueOf).collect(Collectors.joining(","));
 		order.setPrdtids(prdts);
 		order.setPrice(orderreq.getPrice());
 
@@ -58,7 +59,8 @@ public class OrdersController {
 		
 		//inserting data in payments table
 		
-		for(int i=0;i<prdtlist.size();i++){
+		for(int i=0;i<prdtlist.size();i++)
+		{
 			// getting product details by product id
 			Products product=new Products();
 			product=productrepo.getById(prdtlist.get(i));
@@ -72,7 +74,7 @@ public class OrdersController {
 			payment.setBuyercardno(orderreq.getBuyercardno());
 			payment.setPrice(product.getPrice());
 			payment.setSellerid(product.getCreatedby());
-			payment.setSellercardno(seller.getAcdetail());
+			payment.setSellercardno(seller.getCreditCard());
 			paymentrepo.save(payment);
 		}
 		return new ResponseModelParameter<Orders>(true,"order placed",order);
