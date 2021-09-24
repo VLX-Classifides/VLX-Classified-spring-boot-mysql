@@ -2,7 +2,7 @@ package com.webapp.demo.model;
 
 public class RatingAndFeedback { 
 	
-	private int orderid;
+	private int orderId;
 	private int rating;
 	private String feedback;
 	
@@ -12,11 +12,11 @@ public class RatingAndFeedback {
 	public void setRating(int rating) {
 		this.rating = rating;
 	}
-	public int getOrderid() {
-		return orderid;
+	public int getOrderId() {
+		return orderId;
 	}
-	public void setOrderid(int orderid) {
-		this.orderid = orderid;
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
 	public String getFeedback() {
 		return feedback;

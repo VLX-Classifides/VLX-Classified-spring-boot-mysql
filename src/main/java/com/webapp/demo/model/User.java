@@ -1,9 +1,6 @@
 package com.webapp.demo.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +22,7 @@ public class User {
 	private String address;
 	private boolean primemember;
 	private String role;
-	@Column(name = "creditcard")
+	//@Column(name = "creditcard")
 	private long creditCard;
 	public boolean isPrimemember() {
 		return primemember;
@@ -81,5 +78,11 @@ public class User {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public User(String email, String password, String role) {
+		this.email = email;
+		this.password = password;
+		this.role = role;
 	}
 }

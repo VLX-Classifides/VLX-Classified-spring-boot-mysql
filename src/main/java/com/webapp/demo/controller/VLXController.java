@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.webapp.demo.model.ResponseModelList;
-import com.webapp.demo.model.ResponseModelParameter;
-import com.webapp.demo.model.User;
+import com.webapp.demo.model.*;
+import com.webapp.demo.repo.ImageRepo;
 import com.webapp.demo.service.imageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import com.webapp.demo.model.Products;
 import com.webapp.demo.repo.ProductsRepo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +27,9 @@ public class VLXController {
 
 	@Autowired
 	imageService imageS;
+
+	@Autowired
+	ImageRepo imageRepo;
 
 
 	//FETCH ALL PRODUCTS
@@ -43,10 +45,22 @@ public class VLXController {
 	//FETCH SELECTIVE PRODUCTS
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@GetMapping("/api/product/{id}")
-	public ResponseModelParameter<Products> getProductById(@PathVariable("id") int id) {
+	public ResponseModelParameter<ProductDetail> getProductById(@PathVariable("id") int id) {
 
 		Products product= productsrepo.findById(id).orElse(null);
-		return new ResponseModelParameter<Products>(true, "product body", product);
+		if(product.getId() == 0){
+			return new ResponseModelParameter<ProductDetail>(false, "product not found", null);
+		}
+		List<Image> images = imageRepo.findAll();
+		List<Image> selectedImages = new ArrayList<>();
+		for(Image image : images){
+			if(image.getProductId() == id){
+				selectedImages.add(image);
+			}
+		}
+
+		ProductDetail productDetail = new ProductDetail(product, selectedImages);
+		return new ResponseModelParameter<ProductDetail>(true, "product body", productDetail);
 	}
 
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
@@ -91,9 +105,13 @@ public class VLXController {
 
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping(value="/api/product/{id}/assign-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseModelParameter<Products> assignImageToProduct(@PathVariable int id, @RequestParam MultipartFile file) throws IOException {
-
-		Products product = imageS.saveImageFile(id, file);
+	public ResponseModelParameter<Products> assignImageToProduct(@PathVariable int id, @RequestParam MultipartFile[] files) throws IOException {
+		//System.out.println(file);
+		int i = 0;
+		Arrays.asList(files).stream().forEach(file -> {
+			imageS.saveImageFile(id, file);
+		});
+		Products product = productsrepo.getById(id);
 		return new ResponseModelParameter<Products>(true, "Image added", product);
 	}
 }
