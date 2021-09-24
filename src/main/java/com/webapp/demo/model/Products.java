@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 public class Products {
-	@Id @GeneratedValue(strategy = GenerationType.AUTO)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String name;
 	private String brand;
