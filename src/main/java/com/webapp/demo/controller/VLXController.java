@@ -10,7 +10,7 @@ import java.util.List;
 import com.webapp.demo.model.ResponseModelList;
 import com.webapp.demo.model.ResponseModelParameter;
 import com.webapp.demo.model.User;
-import com.webapp.demo.service.imageService;
+import com.webapp.demo.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class VLXController {
 	ProductsRepo productsrepo;
 
 	@Autowired
-	imageService imageS;
+	ImageService imageS;
 
 
 	//FETCH ALL PRODUCTS
@@ -93,7 +93,7 @@ public class VLXController {
 	@PostMapping(value="/api/product/{id}/assign-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseModelParameter<Products> assignImageToProduct(@PathVariable int id, @RequestParam MultipartFile file) throws IOException {
 
-		Products product = imageS.saveImageFile(id, file);
+		Products product = imageS.saveImageFile((long) id, file);
 		return new ResponseModelParameter<Products>(true, "Image added", product);
 	}
 }
