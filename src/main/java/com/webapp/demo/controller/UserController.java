@@ -39,4 +39,10 @@ public class UserController {
 		userrepo.save(user);
 		return new ResponseModelParameter<User>(true, "Thanks for becoming a member", user);
 	}
+
+	@GetMapping("/user/details")
+	public ResponseModelParameter<User> getUserDetails(@RequestParam("email") String email){
+		User user = userrepo.findByEmail(email);
+		return new ResponseModelParameter<User>(true, "User Details", user);
+	}
 }
