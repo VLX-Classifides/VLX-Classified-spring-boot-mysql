@@ -2,6 +2,8 @@ package com.webapp.demo.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -56,7 +58,8 @@ public class OrdersController {
 		order.setCreateddate(dateFormat.format(date));
 
 		orderrepo.save(order);
-		
+
+		LocalDate today=LocalDate.now();
 		//inserting data in payments table
 		
 		for(int i=0;i<prdtlist.size();i++)
@@ -76,6 +79,7 @@ public class OrdersController {
 			payment.setPrice(product.getPrice());
 			payment.setSellerid(product.getCreatedby());
 			payment.setSellercardno(seller.getCreditCard());
+			payment.setDate(today);
 			paymentrepo.save(payment);
 		}
 		return new ResponseModelParameter<Orders>(true,"order placed",order);
@@ -89,5 +93,73 @@ public class OrdersController {
 		order.setFeedback(ratingandfeedback.getFeedback());
 		orderrepo.save(order);
 		return new ResponseModelParameter<Orders>(true, "order rated", order);
+	}
+
+	// get sells chart from payments table
+
+	@GetMapping("/month-revenue/{sellerid}")
+	public ResponseModelParameter<Revenue> generateMonthRevenue(@PathVariable("sellerid") int sellerid)
+	{
+		LocalDate endDate=LocalDate.now();
+		LocalDate startDate=endDate.minusDays(29);
+		List<LocalDate> listofdates=startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+		List<Integer> noofsell=new ArrayList<>();
+		List<Payments> payments=paymentrepo.findBySellerid(sellerid);
+		for(int i=0;i<listofdates.size();i++)
+		{
+			int k=0;
+			for(int j=0;j<payments.size();j++)
+			{
+				if(payments.get(j).getDate().equals(listofdates.get(i)))
+					k+=1;
+			}
+			noofsell.add(k);
+		}
+		Revenue revenue=new Revenue(listofdates,noofsell);
+		return new ResponseModelParameter<Revenue>(true,"last 30 days sell",revenue);
+	}
+
+	@GetMapping("/week-revenue/{sellerid}")
+	public ResponseModelParameter<Revenue> generateWeekRevenue(@PathVariable("sellerid") int sellerid)
+	{
+		LocalDate endDate=LocalDate.now();
+		LocalDate startDate=endDate.minusDays(6);
+		List<LocalDate> listofdates=startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+		List<Integer> noofsell=new ArrayList<>();
+		List<Payments> payments=paymentrepo.findBySellerid(sellerid);
+		for(int i=0;i<listofdates.size();i++)
+		{
+			int k=0;
+			for(int j=0;j<payments.size();j++)
+			{
+				if(payments.get(j).getDate().equals(listofdates.get(i)))
+					k+=1;
+			}
+			noofsell.add(k);
+		}
+		Revenue revenue=new Revenue(listofdates,noofsell);
+		return new ResponseModelParameter<Revenue>(true,"last 7 days sell",revenue);
+	}
+
+	@GetMapping("/year-revenue/{sellerid}")
+	public ResponseModelParameter<Revenue> generateYearRevenue(@PathVariable("sellerid") int sellerid)
+	{
+		LocalDate endDate=LocalDate.now();
+		LocalDate startDate=endDate.minusDays(364);
+		List<LocalDate> listofdates=startDate.datesUntil(endDate.plusDays(1)).collect(Collectors.toList());
+		List<Integer> noofsell=new ArrayList<>();
+		List<Payments> payments=paymentrepo.findBySellerid(sellerid);
+		for(int i=0;i<listofdates.size();i++)
+		{
+			int k=0;
+			for(int j=0;j<payments.size();j++)
+			{
+				if(payments.get(j).getDate().equals(listofdates.get(i)))
+					k+=1;
+			}
+			noofsell.add(k);
+		}
+		Revenue revenue=new Revenue(listofdates,noofsell);
+		return new ResponseModelParameter<Revenue>(true,"last 1 year sell",revenue);
 	}
 }
