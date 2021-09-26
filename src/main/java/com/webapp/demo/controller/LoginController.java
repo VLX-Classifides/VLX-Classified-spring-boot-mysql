@@ -4,9 +4,10 @@ import com.webapp.demo.model.*;
 import com.webapp.demo.repo.UserRepo;
 import com.webapp.demo.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.security.crypto.password.PasswordEncoder;
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 public class LoginController {
@@ -16,6 +17,10 @@ public class LoginController {
 
     @Autowired
     LoginService loginService;
+
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @PostMapping("/user/entry")
     public ResponseModelParameter<User> checkUser(@RequestBody LoginModel loginModel){
@@ -35,7 +40,7 @@ public class LoginController {
     @PostMapping("/user/change-password")
     public ResponseModelParameter<ChangePassword> changePassword(@RequestBody ChangePassword change){
             User user=userRepo.findByEmail(change.getEmail());
-            user.setPassword(change.getPassword());
+            user.setPassword(passwordEncoder().encode(change.getPassword()));
             userRepo.save(user);
             return new ResponseModelParameter<ChangePassword>(true,"password changed");
     }

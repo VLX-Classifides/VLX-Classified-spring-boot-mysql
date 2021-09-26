@@ -13,6 +13,7 @@ public class Products {
 	private String category;
 	private boolean old;
 	private String condi;
+	private boolean donation;
 	private long price;
 	private boolean negotiable;
 	private String loc;
@@ -141,5 +142,13 @@ public class Products {
 
 	public void setImage(Byte[] image) {
 		this.image = image;
+	}
+
+	public boolean isDonation() {
+		return donation;
+	}
+
+	public void setDonation(boolean donation) {
+		this.donation = donation;
 	}
 }

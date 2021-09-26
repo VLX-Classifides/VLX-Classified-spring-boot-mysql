@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Service
-public class ImageService {
+public class imageService {
 
     @Autowired
     ProductsRepo productsRepo;
@@ -22,7 +22,7 @@ public class ImageService {
 
     //@Override
     @Transactional
-    public Products saveImageFile(Long id, MultipartFile file) {
+    public Products saveImageFile(int id, MultipartFile file) {
 
         try {
             Products product = productsRepo.findById(Math.toIntExact(id)).get();

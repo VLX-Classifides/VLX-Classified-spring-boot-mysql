@@ -97,6 +97,8 @@ public class VLXController {
 		Date date = new Date();
 		product.setCreateddate(dateFormat.format(date));
 		product.setStatus("pending");
+		if(product.isDonation()==true)
+			product.setPrice(0);
 		Products newProduct = productsrepo.save(product);
 
 		return new ResponseModelParameter<Products>(true, "Product Created", newProduct);
