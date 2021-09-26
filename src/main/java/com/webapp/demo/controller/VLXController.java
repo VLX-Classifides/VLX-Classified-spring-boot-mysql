@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.webapp.demo.repo.ImageRepo;
 import com.webapp.demo.repo.ProductsRepo;
-import com.webapp.demo.service.imageService;
+import com.webapp.demo.service.ImageService;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,7 +25,7 @@ public class VLXController {
 	ProductsRepo productsrepo;
 
 	@Autowired
-	imageService imageS;
+	ImageService imageS;
 
 	@Autowired
 	ImageRepo imageRepo;
