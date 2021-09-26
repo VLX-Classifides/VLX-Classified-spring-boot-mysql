@@ -1,8 +1,6 @@
 package com.webapp.demo.service;
 
-import com.webapp.demo.model.Image;
 import com.webapp.demo.model.Products;
-import com.webapp.demo.repo.ImageRepo;
 import com.webapp.demo.repo.ProductsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,15 +15,12 @@ public class ImageService {
     @Autowired
     ProductsRepo productsRepo;
 
-    @Autowired
-    ImageRepo imageRepo;
-
     //@Override
     @Transactional
-    public Products saveImageFile(int id, MultipartFile file) {
+    public Products saveImageFile(Long id, MultipartFile file) {
 
         try {
-            Products product = productsRepo.findById(id).get();
+            Products product = productsRepo.findById(Math.toIntExact(id)).get();
 
             Byte[] byteObjects = new Byte[file.getBytes().length];
 
@@ -35,17 +30,14 @@ public class ImageService {
                 byteObjects[i++] = b;
             }
 
-            Image image = new Image(id, byteObjects);
-            imageRepo.save(image);
             product.setImage(byteObjects);
 
             Products newProduct = productsRepo.save(product);
-
             return newProduct;
         } catch (IOException e) {
             //todo handle better
             //log.error("Error occurred", e);
-            Products product = productsRepo.findById(id).get();
+            Products product = productsRepo.findById(Math.toIntExact(id)).get();
 
             e.printStackTrace();
 
