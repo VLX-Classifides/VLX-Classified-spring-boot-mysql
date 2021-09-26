@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.webapp.demo.model.*;
 import com.webapp.demo.repo.ImageRepo;
-import com.webapp.demo.service.imageService;
+import com.webapp.demo.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class VLXController {
 	ProductsRepo productsrepo;
 
 	@Autowired
-	imageService imageS;
+	ImageService imageS;
 
 	@Autowired
 	ImageRepo imageRepo;
