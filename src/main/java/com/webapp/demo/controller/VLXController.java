@@ -9,15 +9,14 @@ import java.util.Date;
 import java.util.List;
 
 import com.webapp.demo.model.*;
-import com.webapp.demo.repo.ImageRepo;
-import com.webapp.demo.service.imageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import com.webapp.demo.repo.ImageRepo;
 import com.webapp.demo.repo.ProductsRepo;
+import com.webapp.demo.service.imageService;
+
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController

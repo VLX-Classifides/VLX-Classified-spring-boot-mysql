@@ -8,11 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="VLX-JWT-MySql" />
+        <module name="VLX-Classified-spring-boot-mysql" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="VLX-Classified-spring-boot-mysql" options="-parameters" />
       <module name="VLX-JWT-MySql" options="-parameters" />
     </option>
   </component>

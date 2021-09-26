@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class Payments {
@@ -15,6 +16,15 @@ public class Payments {
 	private long price;
 	private int sellerid;
 	private long sellercardno;
+	private LocalDate date;
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
 
 	public int getId() {
 		return id;

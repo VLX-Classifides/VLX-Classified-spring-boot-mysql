@@ -4,9 +4,8 @@ public class ResponseModelParameter<T> extends ResponseModel {
 
     private T result;
 
-    public ResponseModelParameter(boolean success, T result) {
-        super(success);
-        this.result=result;
+    public ResponseModelParameter(boolean success, String message) {
+        super(success,message);
     }
 
     public ResponseModelParameter(boolean success, String message, T result) {
