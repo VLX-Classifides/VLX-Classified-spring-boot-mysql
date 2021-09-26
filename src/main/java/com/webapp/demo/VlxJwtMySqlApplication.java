@@ -31,7 +31,7 @@ public class VlxJwtMySqlApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		User user = userRepo.findByEmail("admin@gmail.com");
 		if(user.getId() == 0){
-			User user1 = new User("admin@gmail.com", "admin", "admin");
+			User user1 = new User("admin@gmail.com", passwordEncoder().encode("admin"), "admin");
 			user1.setPrimemember(true);
 			User user2 = new User("buyer@gmail.com", passwordEncoder().encode("buyer"), "buyer");
 			User user3 = new User("seller@gmail.com", passwordEncoder().encode("seller"), "seller");
