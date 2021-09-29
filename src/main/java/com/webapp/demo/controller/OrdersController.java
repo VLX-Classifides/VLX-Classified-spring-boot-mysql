@@ -69,18 +69,19 @@ public class OrdersController {
 			product=productrepo.getById(prdtlist.get(i));
 			
 			// getting seller details by seller id from user table
-			User seller=new User();
-			seller=userrepo.getById(product.getCreatedby());
-			
-			Payments payment=new Payments();
-			payment.setPrdtid(prdtlist.get(i));
-			payment.setBuyerid(orderreq.getBuyerid());
-			payment.setBuyercardno(orderreq.getBuyercardno());
-			payment.setPrice(product.getPrice());
-			payment.setSellerid(product.getCreatedby());
-			payment.setSellercardno(seller.getCreditCard());
-			payment.setDate(today);
-			paymentrepo.save(payment);
+			if(product.getCreatedby()!=0) {
+				User seller = userrepo.getById(product.getCreatedby());
+
+				Payments payment = new Payments();
+				payment.setPrdtid(prdtlist.get(i));
+				payment.setBuyerid(orderreq.getBuyerid());
+				payment.setBuyercardno(orderreq.getBuyercardno());
+				payment.setPrice(product.getPrice());
+				payment.setSellerid(product.getCreatedby());
+				payment.setSellercardno(seller.getCreditCard());
+				payment.setDate(today);
+				paymentrepo.save(payment);
+			}
 		}
 		return new ResponseModelParameter<Orders>(true,"order placed",order);
 	} 
@@ -95,6 +96,23 @@ public class OrdersController {
 		return new ResponseModelParameter<Orders>(true, "order rated", order);
 	}
 
+	// place order if products are donation
+	@PostMapping("/place-donation-order")
+	public ResponseModelParameter<Orders> placeDonationOrder(@RequestBody DonationOrder orderreq)
+	{
+		// inserting data in orders table
+		Orders order=new Orders();
+		order.setBuyerid(orderreq.getBuyerid());
+		List<Integer> prdtlist=orderreq.getPrdtids();
+		String prdts=prdtlist.stream().map(String::valueOf).collect(Collectors.joining(","));
+		order.setPrdtids(prdts);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		order.setCreateddate(dateFormat.format(date));
+
+		orderrepo.save(order);
+		return new ResponseModelParameter<Orders>(true, "order placed", order);
+	}
 	// get sells chart from payments table
 
 	@GetMapping("/month-revenue/{sellerid}")

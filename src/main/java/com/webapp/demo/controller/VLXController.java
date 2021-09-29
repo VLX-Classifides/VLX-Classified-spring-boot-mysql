@@ -20,6 +20,7 @@ import com.webapp.demo.service.imageService;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 public class VLXController {
 	@Autowired
 	ProductsRepo productsrepo;
@@ -96,9 +97,8 @@ public class VLXController {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
 		product.setCreateddate(dateFormat.format(date));
+		product.setDonation(false);
 		product.setStatus("pending");
-		if(product.isDonation()==true)
-			product.setPrice(0);
 		Products newProduct = productsrepo.save(product);
 
 		return new ResponseModelParameter<Products>(true, "Product Created", newProduct);
@@ -107,6 +107,79 @@ public class VLXController {
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
 	@PostMapping(value="/api/product/{id}/assign-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseModelParameter<Products> assignImageToProduct(@PathVariable int id, @RequestParam MultipartFile[] files) throws IOException {
+		//System.out.println(file);
+		int i = 0;
+		Arrays.asList(files).stream().forEach(file -> {
+			imageS.saveImageFile(id, file);
+		});
+		Products product = productsrepo.getById(id);
+		return new ResponseModelParameter<Products>(true, "Image added", product);
+	}
+
+	// donations
+	@PostMapping("/donate/product")
+	public ResponseModelParameter<Products> donateProduct(@RequestBody Products product)
+	{
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		product.setCreateddate(dateFormat.format(date));
+		product.setDonation(true);
+		product.setPrice(0);
+		product.setNegotiable(false);
+		product.setStatus("pending");
+		product.setCreatedby(0);
+		Products newProduct = productsrepo.save(product);
+
+		return new ResponseModelParameter<Products>(true, "Product donated", newProduct);
+	}
+
+	@PostMapping(value="/donate/product/{id}/assign-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseModelParameter<Products> assignImageToDonatedProduct(@PathVariable int id, @RequestParam MultipartFile[] files) throws IOException {
+		//System.out.println(file);
+		int i = 0;
+		Arrays.asList(files).stream().forEach(file -> {
+			imageS.saveImageFile(id, file);
+		});
+		Products product = productsrepo.getById(id);
+		return new ResponseModelParameter<Products>(true, "Image added", product);
+	}
+
+	// update product
+
+	@PostMapping("/update/product")
+	public ResponseModelParameter<Products> updateProduct(@RequestBody Products update)
+	{
+		Products product=productsrepo.findById(update.getId()).orElse(null);
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		product.setCreateddate(dateFormat.format(date));
+		product.setName(update.getName());
+		product.setBrand(update.getBrand());
+		product.setDescription(update.getDescription());
+		product.setCategory(update.getCategory());
+		product.setOld(update.isOld());
+		if(update.isOld())
+		{
+			product.setUsedyr(update.getUsedyr());
+			product.setCondi(update.getCondi());
+			product.setNegotiable(update.isNegotiable());
+		}
+		else{
+			product.setUsedyr(0);
+			product.setCondi(null);
+			product.setNegotiable(false);
+		}
+		product.setDonation(update.isDonation());
+		product.setPrice(update.getPrice());
+		product.setLoc(update.getLoc());
+		product.setStatus("pending");
+		product.setCreatedby(update.getCreatedby());
+		productsrepo.save(product);
+		return new ResponseModelParameter<Products>(true,"product updated",product);
+	}
+
+	@PostMapping(value="/update/product/{id}/assign-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseModelParameter<Products> assignImageToUpdatedProduct(@PathVariable int id, @RequestParam MultipartFile[] files) throws IOException {
 		//System.out.println(file);
 		int i = 0;
 		Arrays.asList(files).stream().forEach(file -> {

@@ -7,6 +7,8 @@ import com.webapp.demo.model.VerifyOTP;
 import com.webapp.demo.repo.UserRepo;
 import com.webapp.demo.service.SendEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,9 @@ public class SignupController {
     @Autowired
     SendEmailService emailService;
 
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     // send otp to email address
     @PostMapping("/user/send-otp")
     public ResponseModelParameter<SendOTP> sendEmail(@RequestBody SendOTP sendOTP) {
@@ -57,6 +62,7 @@ public class SignupController {
         if(user1.getId() != 0){
             return new ResponseModelParameter<User>(false, "User already present. Login", null);
         }
+        user.setPassword(passwordEncoder().encode(user.getPassword()));
         User newUser = userRepo.save(user);
         return new ResponseModelParameter<User>(true, "Signup Successfull", newUser);
     }

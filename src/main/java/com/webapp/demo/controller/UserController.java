@@ -26,7 +26,7 @@ public class UserController {
 	}
 	
 	// get user details by id
-	@GetMapping("/user/{id}")
+	@GetMapping("/users/{id}")
 	public ResponseModelParameter<User> getIndividualUser(@PathVariable("id") int id){
 		User user=userrepo.findById(id).orElse(null);
 		return new ResponseModelParameter<User>(true, "individual user data", user);
@@ -40,9 +40,25 @@ public class UserController {
 		return new ResponseModelParameter<User>(true, "Thanks for becoming a member", user);
 	}
 
-	@GetMapping("/user/details")
+	@GetMapping("/users/details")
 	public ResponseModelParameter<User> getUserDetails(@RequestParam("email") String email){
 		User user = userrepo.findByEmail(email);
 		return new ResponseModelParameter<User>(true, "User Details", user);
+	}
+
+	// update user profile
+	@PutMapping("/users/update-user")
+	public ResponseModelParameter<User> updateUserProfile(@RequestBody User update)
+	{
+		User user=userrepo.findById(update.getId()).orElse(null);
+		user.setUsername(update.getUsername());
+		user.setContact(update.getContact());
+		user.setAddress(update.getAddress());
+		if(user.getRole().equals("seller"))
+		{
+			user.setCreditCard(update.getCreditCard());
+		}
+		userrepo.save(user);
+		return new ResponseModelParameter<User>(true,"user profile updated",user);
 	}
 }

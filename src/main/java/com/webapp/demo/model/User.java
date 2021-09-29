@@ -22,7 +22,7 @@ public class User {
 	private String address;
 	private boolean primemember;
 	private String role;
-	//@Column(name = "creditcard")
+	//@Column(name = "credit_card")
 	private long creditCard;
 	public boolean isPrimemember() {
 		return primemember;
