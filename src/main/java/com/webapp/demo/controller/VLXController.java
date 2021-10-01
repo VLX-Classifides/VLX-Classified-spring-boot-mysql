@@ -3,10 +3,7 @@ package com.webapp.demo.controller;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import com.webapp.demo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +70,19 @@ public class VLXController {
 				selectedProducts.add(product);
 		}
 		return new ResponseModelList<Products>(true,"approved products by category",selectedProducts);
+	}
+
+	// search product by location
+	@GetMapping("/api/products-by-loc/{location}")
+	public ResponseModelList<Products> getProductByLocation(@PathVariable("location") String location){
+		List<Products> products= productsrepo.approvedProducts();
+		List<Products> selectedProducts = new ArrayList<>();
+		String loc=location.toLowerCase();
+		for(Products product :products){
+			if(product.getLoc().toLowerCase().contains(loc))
+				selectedProducts.add(product);
+		}
+		return new ResponseModelList<Products>(true,"approved products by location",selectedProducts);
 	}
 
 	@CrossOrigin(origins = {"http://localhost:3000", "http://192.168.29.226:3000"})
