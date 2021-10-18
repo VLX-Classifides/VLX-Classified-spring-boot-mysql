@@ -36,7 +36,7 @@ public class SignupController {
         otp=random.nextInt(999999 - 100000) + 100000;
         if(sendOTP.getName()==null)
             sendOTP.setName("Sir/ Madam");
-        String body="Hello "+sendOTP.getName()+", In VLX Classifide your one time password is "+String.valueOf(otp)+" . It will be valid for 3 minutes. Don't Share this with anybody";
+        String body="Hello "+sendOTP.getName()+",\n\tIn VLX Classifide your one time password is "+String.valueOf(otp)+" .It will be valid for 3 minutes. Don't Share this with anybody";
         String topic="OTP for VLX cLassifide";
         emailService.sendEmail(sendOTP.getEmail(),body,topic);
         return new ResponseModelParameter<SendOTP>(true,"otp sent to mail");
